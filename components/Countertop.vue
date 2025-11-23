@@ -1,6 +1,12 @@
 <template>
-  <section class="countertop">
-    <div class="mask"></div>
+  <section
+    class="countertop"
+    :class="{ 'countertop--scrolled': shouldHideMask }"
+  >
+    <div
+      class="mask"
+      :class="{ 'mask--hidden': shouldHideMask }"
+    />
 
     <!-- <div class="block"></div> -->
 
@@ -51,6 +57,11 @@
     width: 100%;
     padding: 0 var(--border-thickness) var(--border-thickness);
     background: #000;
+    transition: background 0.2s ease;
+
+    &--scrolled {
+      background: transparent;
+    }
   }
 
   .container {
@@ -137,7 +148,13 @@
     flex-direction: column;
     align-items: flex-end;
     position: relative;
-    background: red;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     &::before {
       content: '';
@@ -166,6 +183,7 @@
 <script lang="ts" setup>
   const inputValue = ref('')
   const showTestWidget = ref(false)
+  const { shouldHideMask } = useCanvasScroll()
 
   const handleArrowClick = () => {
     showTestWidget.value = true

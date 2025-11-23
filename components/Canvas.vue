@@ -1,5 +1,9 @@
 <template>
-  <section class="canvas">
+  <section
+    ref="canvasRef"
+    class="canvas"
+    @scroll="handleScroll"
+  >
     <!-- <h1>Canvas</h1> -->
     <img
       class="rm"
@@ -26,4 +30,13 @@
   }
 </style>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  const canvasRef = ref<HTMLElement | null>(null)
+  const { scrollY } = useCanvasScroll()
+
+  const handleScroll = () => {
+    if (canvasRef.value) {
+      scrollY.value = canvasRef.value.scrollTop
+    }
+  }
+</script>
