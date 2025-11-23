@@ -26,27 +26,29 @@
       </div>
 
       <!-- suggestions -->
-      <Transition name="suggestions-fade">
-        <div
-          v-if="filteredSuggestions.length > 0"
-          class="suggestions-container"
-        >
-          <button
-            v-for="(suggestion, index) in filteredSuggestions"
-            :key="index"
-            class="suggestion-pill"
-            @click="selectSuggestion(suggestion.text)"
+      <div class="suggestions-wrapper">
+        <Transition name="suggestions-fade">
+          <div
+            v-if="filteredSuggestions.length > 0"
+            class="suggestions-container"
           >
-            <div class="suggestion-avatar">
-              <img
-                :src="suggestion.avatar"
-                :alt="suggestion.text"
-              />
-            </div>
-            <span class="suggestion-text">{{ suggestion.text }}</span>
-          </button>
-        </div>
-      </Transition>
+            <button
+              v-for="(suggestion, index) in filteredSuggestions"
+              :key="index"
+              class="suggestion-pill"
+              @click="selectSuggestion(suggestion.text)"
+            >
+              <div class="suggestion-avatar">
+                <img
+                  :src="suggestion.avatar"
+                  :alt="suggestion.text"
+                />
+              </div>
+              <span class="suggestion-text">{{ suggestion.text }}</span>
+            </button>
+          </div>
+        </Transition>
+      </div>
 
       <!-- input -->
       <div class="input-container">
@@ -135,15 +137,29 @@
     grid-template-rows: 1fr;
   }
 
+  .suggestions-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s var(--ease, ease-out);
+    overflow: hidden;
+
+    > * {
+      min-height: 0;
+    }
+  }
+
   .container.has-suggestions {
     border-radius: 24px;
+  }
+
+  .container.has-suggestions .suggestions-wrapper {
+    grid-template-rows: 1fr;
   }
 
   .suggestions-container {
     display: flex;
     gap: 0.8rem;
-    padding: 0 0.6rem 0.8rem;
-    padding: 0;
+    // padding: 0 0.6rem 0.8rem;
     flex-wrap: wrap;
   }
 
@@ -154,21 +170,9 @@
     padding: 0.6rem 1rem;
     border-radius: 100px;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: all 0.2s ease;
     font-size: 1.4rem;
     color: #fff;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      transform: translateY(0) scale(0.98);
-    }
   }
 
   .suggestion-avatar {
@@ -243,11 +247,12 @@
 
   // suggestions animation //
   .suggestions-fade-enter-active {
-    transition: all 0.3s ease-out;
+    transition: all 0.5s var(--ease, ease-out);
+    transition-delay: 0.4s;
   }
 
   .suggestions-fade-leave-active {
-    transition: all 0.2s ease-in;
+    transition: all 0.2s var(--ease, ease-in);
   }
 
   .suggestions-fade-enter-from {
