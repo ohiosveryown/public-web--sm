@@ -4,12 +4,23 @@
 
     <!-- <div class="block"></div> -->
 
-    <div class="container">
+    <div
+      class="container"
+      :class="{ 'has-widget': showTestWidget }"
+    >
+      <div class="widget-wrapper">
+        <Transition name="widget-fade">
+          <TestWidget v-if="showTestWidget" />
+        </Transition>
+      </div>
+
+      <!-- input -->
       <div class="input-container">
         <input
           v-model="inputValue"
           type="text"
           placeholder="Grow with Square..."
+          @keydown.meta.enter="handleArrowClick"
         />
 
         <button
@@ -22,6 +33,7 @@
         <button
           v-show="inputValue"
           class="input-btn input-btn--arrow"
+          @click="handleArrowClick"
         >
           <IconArrow />
         </button>
@@ -42,10 +54,27 @@
   }
 
   .container {
+    display: flex;
+    flex-direction: column;
     border-radius: var(--radius-inner);
-    padding: 0.6rem 0.6rem 0.6rem 1.6rem;
+    padding: 0.6rem;
     width: 100%;
     background: #ffffff28;
+  }
+
+  .widget-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s var(--ease, ease-out);
+    overflow: hidden;
+
+    > * {
+      min-height: 0;
+    }
+  }
+
+  .container.has-widget .widget-wrapper {
+    grid-template-rows: 1fr;
   }
 
   .input-container {
@@ -53,10 +82,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
   }
 
   input {
-    font-size: 1.5rem;
     flex: 1;
   }
 
@@ -77,6 +106,25 @@
 
   .input-btn--arrow {
     opacity: 1;
+  }
+
+  // widget animation //
+  .widget-fade-enter-active {
+    transition: all 0.4s var(--ease, ease-out);
+  }
+
+  .widget-fade-leave-active {
+    transition: all 0.3s var(--ease, ease-in);
+  }
+
+  .widget-fade-enter-from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.95);
+  }
+
+  .widget-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
   }
 
   // mask //
@@ -113,4 +161,10 @@
 
 <script lang="ts" setup>
   const inputValue = ref('')
+  const showTestWidget = ref(false)
+
+  const handleArrowClick = () => {
+    showTestWidget.value = true
+    inputValue.value = ''
+  }
 </script>
