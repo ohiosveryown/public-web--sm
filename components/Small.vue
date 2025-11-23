@@ -1,6 +1,8 @@
 <template>
   <div class="device">
     <Navigation />
+    <Canvas />
+    <Countertop />
   </div>
 </template>
 
@@ -9,7 +11,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: var(--radius-phone);
+    position: relative;
+    // border-radius: var(--radius-phone);
     width: 44rem;
     height: 95.6rem;
     padding: 4.8rem var(--border-thickness) var(--border-thickness);
