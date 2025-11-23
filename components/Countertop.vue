@@ -14,6 +14,7 @@
       class="container"
       :class="{
         'has-widget': showTestWidget,
+        'has-suggestions': filteredSuggestions.length > 0,
         'container--scrolled': shouldHideMask && !isInputFocused,
         'container--focused': isInputFocused,
       }"
@@ -134,10 +135,15 @@
     grid-template-rows: 1fr;
   }
 
+  .container.has-suggestions {
+    border-radius: 24px;
+  }
+
   .suggestions-container {
     display: flex;
     gap: 0.8rem;
     padding: 0 0.6rem 0.8rem;
+    padding: 0;
     flex-wrap: wrap;
   }
 
