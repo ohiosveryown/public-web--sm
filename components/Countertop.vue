@@ -73,12 +73,15 @@
     }
   }
 
+  .container.has-widget {
+    border-radius: var(--radius-inner) var(--radius-inner) 24px 24px;
+  }
+
   .container.has-widget .widget-wrapper {
     grid-template-rows: 1fr;
   }
 
   .input-container {
-    // border: 1px solid pink;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,11 +113,12 @@
 
   // widget animation //
   .widget-fade-enter-active {
-    transition: all 0.4s var(--ease, ease-out);
+    transition: all 0.5s var(--ease, ease-out);
+    transition-delay: 0.4s;
   }
 
   .widget-fade-leave-active {
-    transition: all 0.3s var(--ease, ease-in);
+    transition: all 0.4s var(--ease, ease-in);
   }
 
   .widget-fade-enter-from {

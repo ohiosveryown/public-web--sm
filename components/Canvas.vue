@@ -3,7 +3,7 @@
     <!-- <h1>Canvas</h1> -->
     <img
       class="rm"
-      src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1756947317/proportional.design-4.0/hero_2x_uajsjm.webp"
+      src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1763936610/public-web--sm/rm_2x_s4vpfa.webp"
       alt="canvas"
     />
   </section>
@@ -21,7 +21,7 @@
 
   .rm {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
   }
 </style>
