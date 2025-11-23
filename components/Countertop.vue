@@ -14,7 +14,8 @@
       class="container"
       :class="{
         'has-widget': showTestWidget,
-        'container--scrolled': shouldHideMask,
+        'container--scrolled': shouldHideMask && !isInputFocused,
+        'container--focused': isInputFocused,
       }"
     >
       <div class="widget-wrapper">
@@ -30,6 +31,8 @@
           type="text"
           placeholder="Grow with Square..."
           @keydown.meta.enter="handleArrowClick"
+          @focus="isInputFocused = true"
+          @blur="isInputFocused = false"
         />
 
         <button
@@ -82,6 +85,10 @@
       width: 50%;
       background: #00000099;
       transform: translateY(-0.8rem);
+    }
+
+    &--focused {
+      width: 100% !important;
     }
   }
 
@@ -197,6 +204,7 @@
 <script lang="ts" setup>
   const inputValue = ref('')
   const showTestWidget = ref(false)
+  const isInputFocused = ref(false)
   const { shouldHideMask } = useCanvasScroll()
 
   const handleArrowClick = () => {
