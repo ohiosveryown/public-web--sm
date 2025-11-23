@@ -24,6 +24,29 @@
         </Transition>
       </div>
 
+      <!-- suggestions -->
+      <Transition name="suggestions-fade">
+        <div
+          v-if="filteredSuggestions.length > 0"
+          class="suggestions-container"
+        >
+          <button
+            v-for="(suggestion, index) in filteredSuggestions"
+            :key="index"
+            class="suggestion-pill"
+            @click="selectSuggestion(suggestion.text)"
+          >
+            <div class="suggestion-avatar">
+              <img
+                :src="suggestion.avatar"
+                :alt="suggestion.text"
+              />
+            </div>
+            <span class="suggestion-text">{{ suggestion.text }}</span>
+          </button>
+        </div>
+      </Transition>
+
       <!-- input -->
       <div class="input-container">
         <input
@@ -111,6 +134,56 @@
     grid-template-rows: 1fr;
   }
 
+  .suggestions-container {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0 0.6rem 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .suggestion-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.4rem;
+    color: #fff;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+
+  .suggestion-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.1);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .suggestion-text {
+    white-space: nowrap;
+  }
+
   .input-container {
     display: flex;
     align-items: center;
@@ -162,6 +235,25 @@
     transform: translateY(-0.5rem) scale(0.98);
   }
 
+  // suggestions animation //
+  .suggestions-fade-enter-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .suggestions-fade-leave-active {
+    transition: all 0.2s ease-in;
+  }
+
+  .suggestions-fade-enter-from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
+  .suggestions-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
   // mask //
   .mask {
     display: flex;
@@ -206,6 +298,49 @@
   const showTestWidget = ref(false)
   const isInputFocused = ref(false)
   const { shouldHideMask } = useCanvasScroll()
+
+  // Sample suggestions data - replace with your actual data source
+  const suggestions = ref([
+    {
+      text: 'How much does Square cost',
+      avatar:
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%234A90E2"/%3E%3Cpath d="M30 50 L45 65 L70 35" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/%3E%3C/svg%3E',
+    },
+    {
+      text: 'does Square work',
+      avatar:
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23D4A574"/%3E%3Ccircle cx="50" cy="50" r="30" fill="%23C8965A"/%3E%3C/svg%3E',
+    },
+    {
+      text: 'does Square integrate',
+      avatar:
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%2394C973"/%3E%3Cpath d="M50 30 L50 70 M30 50 L70 50" stroke="white" stroke-width="6" stroke-linecap="round"/%3E%3C/svg%3E',
+    },
+    {
+      text: 'does Square accept',
+      avatar:
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23B8A9C9"/%3E%3C/svg%3E',
+    },
+  ])
+
+  const MIN_CHARS_FOR_SUGGESTIONS = 5
+
+  const filteredSuggestions = computed(() => {
+    if (inputValue.value.length < MIN_CHARS_FOR_SUGGESTIONS) {
+      return []
+    }
+
+    const query = inputValue.value.toLowerCase().trim()
+    return suggestions.value
+      .filter((suggestion) => suggestion.text.toLowerCase().includes(query))
+      .slice(0, 3) // Limit to 3 suggestions
+  })
+
+  const selectSuggestion = (text: string) => {
+    inputValue.value = text
+    // Optionally focus the input after selection
+    // You could also trigger a search/submit here
+  }
 
   const handleArrowClick = () => {
     showTestWidget.value = true
