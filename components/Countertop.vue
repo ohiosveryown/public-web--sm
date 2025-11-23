@@ -12,7 +12,10 @@
 
     <div
       class="container"
-      :class="{ 'has-widget': showTestWidget }"
+      :class="{
+        'has-widget': showTestWidget,
+        'container--scrolled': shouldHideMask,
+      }"
     >
       <div class="widget-wrapper">
         <Transition name="widget-fade">
@@ -68,9 +71,18 @@
     display: flex;
     flex-direction: column;
     border-radius: var(--radius-inner);
+    margin: 0 auto;
     padding: 0.6rem;
     width: 100%;
     background: #ffffff28;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+
+    &--scrolled {
+      width: 50%;
+      background: #00000099;
+      transform: translateY(-0.8rem);
+    }
   }
 
   .widget-wrapper {
@@ -101,6 +113,7 @@
 
   input {
     flex: 1;
+    min-width: 88px;
   }
 
   .input-btn {
@@ -150,6 +163,7 @@
     position: relative;
     opacity: 1;
     transition: opacity 0.2s ease;
+    pointer-events: none;
 
     &--hidden {
       opacity: 0;
