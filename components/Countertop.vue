@@ -32,22 +32,25 @@
             v-if="filteredSuggestions.length > 0"
             class="suggestions-container"
           >
-            <button
-              v-for="(suggestion, index) in filteredSuggestions"
-              :key="index"
-              class="suggestion-pill"
-              @click="selectSuggestion(suggestion.text)"
-            >
-              <div class="suggestion-avatar">
-                <img
-                  :src="suggestion.avatar"
-                  :alt="suggestion.text"
-                />
-              </div>
-              <span class="suggestion-text monospace">{{
-                suggestion.text
-              }}</span>
-            </button>
+            <div class="suggestions-scroll">
+              <button
+                v-for="(suggestion, index) in filteredSuggestions"
+                :key="index"
+                class="suggestion-pill"
+                @click="selectSuggestion(suggestion.text)"
+              >
+                <div class="suggestion-avatar">
+                  <img
+                    :src="suggestion.avatar"
+                    :alt="suggestion.text"
+                  />
+                </div>
+                <span class="suggestion-text monospace">{{
+                  suggestion.text
+                }}</span>
+              </button>
+            </div>
+            <div class="suggestions-fade"></div>
           </div>
         </Transition>
       </div>
@@ -159,9 +162,38 @@
   }
 
   .suggestions-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .suggestions-scroll {
     display: flex;
     gap: 0.6rem;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE/Edge
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome/Safari
+    }
+
+    // Smooth scrolling
+    scroll-behavior: smooth;
+  }
+
+  .suggestions-fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 6.4rem;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, rgba(40, 40, 40, 1));
+
+    .container--scrolled & {
+      background: linear-gradient(to right, transparent, rgba(40, 40, 40, 0.2));
+    }
   }
 
   .suggestion-pill {
@@ -172,6 +204,7 @@
     border-radius: 100px;
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
+    flex-shrink: 0;
   }
 
   .suggestion-avatar {
@@ -309,7 +342,6 @@
   const isInputFocused = ref(false)
   const { shouldHideMask } = useCanvasScroll()
 
-  // Sample suggestions data - replace with your actual data source
   const suggestions = ref([
     {
       text: 'How much does Square cost',
@@ -327,7 +359,7 @@
         'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%2394C973"/%3E%3Cpath d="M50 30 L50 70 M30 50 L70 50" stroke="white" stroke-width="6" stroke-linecap="round"/%3E%3C/svg%3E',
     },
     {
-      text: 'does Square accept',
+      text: 'does Square accept bitcoin',
       avatar:
         'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23B8A9C9"/%3E%3C/svg%3E',
     },
