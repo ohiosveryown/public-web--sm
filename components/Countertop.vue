@@ -21,7 +21,12 @@
     >
       <div class="widget-wrapper">
         <Transition name="widget-fade">
-          <TestWidget v-if="showTestWidget" />
+          <TestWidget
+            v-if="showTestWidget"
+            :answer="currentAnswer"
+            :question="currentQuestion"
+            :is-loading="isLoadingAnswer"
+          />
         </Transition>
       </div>
 
@@ -342,55 +347,91 @@
 </style>
 
 <script lang="ts" setup>
-  const inputValue = ref('')
-  const showTestWidget = ref(false)
-  const isInputFocused = ref(false)
-  const { shouldHideMask } = useCanvasScroll()
+  const inputValue = ref('');
+  const showTestWidget = ref(false);
+  const isInputFocused = ref(false);
+  const isLoadingSuggestions = ref(false);
+  const isLoadingAnswer = ref(false);
+  const currentAnswer = ref('');
+  const currentQuestion = ref('');
+  const { shouldHideMask } = useCanvasScroll();
 
-  const suggestions = ref([
-    {
-      text: 'How much does Square cost',
-      avatar:
-        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%234A90E2"/%3E%3Cpath d="M30 50 L45 65 L70 35" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/%3E%3C/svg%3E',
-    },
-    {
-      text: 'does Square work',
-      avatar:
-        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23D4A574"/%3E%3Ccircle cx="50" cy="50" r="30" fill="%23C8965A"/%3E%3C/svg%3E',
-    },
-    {
-      text: 'does Square integrate',
-      avatar:
-        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%2394C973"/%3E%3Cpath d="M50 30 L50 70 M30 50 L70 50" stroke="white" stroke-width="6" stroke-linecap="round"/%3E%3C/svg%3E',
-    },
-    {
-      text: 'does Square accept bitcoin',
-      avatar:
-        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23B8A9C9"/%3E%3C/svg%3E',
-    },
-  ])
+  const suggestions = ref<Array<{ text: string; avatar: string }>>([]);
 
-  const MIN_CHARS_FOR_SUGGESTIONS = 5
+  const MIN_CHARS_FOR_SUGGESTIONS = 5;
 
-  const filteredSuggestions = computed(() => {
-    if (inputValue.value.length < MIN_CHARS_FOR_SUGGESTIONS) {
-      return []
+  // Debounced function to fetch suggestions from API
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  const fetchSuggestions = async (query: string) => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
     }
 
-    const query = inputValue.value.toLowerCase().trim()
-    return suggestions.value
-      .filter((suggestion) => suggestion.text.toLowerCase().includes(query))
-      .slice(0, 3) // Limit to 3 suggestions
-  })
+    if (query.length < MIN_CHARS_FOR_SUGGESTIONS) {
+      suggestions.value = [];
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      isLoadingSuggestions.value = true;
+      try {
+        const response = await $fetch<{
+          suggestions: Array<{ text: string; avatar: string }>;
+        }>('/api/suggestions', {
+          method: 'POST',
+          body: { query },
+        });
+        suggestions.value = response.suggestions || [];
+      } catch (error) {
+        console.error('Failed to fetch suggestions:', error);
+        suggestions.value = [];
+      } finally {
+        isLoadingSuggestions.value = false;
+      }
+    }, 300); // 300ms debounce
+  };
+
+  // Watch for input changes and fetch suggestions
+  watch(inputValue, (newValue) => {
+    fetchSuggestions(newValue);
+  });
+
+  const filteredSuggestions = computed(() => {
+    return suggestions.value;
+  });
 
   const selectSuggestion = (text: string) => {
-    inputValue.value = text
-    // Optionally focus the input after selection
-    // You could also trigger a search/submit here
-  }
+    inputValue.value = text;
+  };
 
-  const handleArrowClick = () => {
-    showTestWidget.value = true
-    inputValue.value = ''
-  }
+  const handleArrowClick = async () => {
+    if (!inputValue.value.trim()) return;
+
+    const question = inputValue.value;
+    currentQuestion.value = question;
+    currentAnswer.value = '';
+    isLoadingAnswer.value = true;
+    showTestWidget.value = true;
+
+    try {
+      const response = await $fetch<{ answer: string; question: string }>(
+        '/api/answer',
+        {
+          method: 'POST',
+          body: { question },
+        }
+      );
+
+      currentAnswer.value = response.answer;
+
+      // Clear input after submitting
+      inputValue.value = '';
+    } catch (error) {
+      console.error('Failed to get answer:', error);
+      currentAnswer.value =
+        'Sorry, I encountered an error while fetching the answer. Please try again.';
+    } finally {
+      isLoadingAnswer.value = false;
+    }
+  };
 </script>
