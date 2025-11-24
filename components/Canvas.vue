@@ -6,6 +6,12 @@
   >
     <Hero />
 
+    <img
+      src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1764013050/public-web--sm/section_3x_x97bzi.webp"
+      alt="Section"
+      class="section"
+    />
+
     <!-- <img
       class="rm"
       src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1763936610/public-web--sm/rm_2x_s4vpfa.webp"

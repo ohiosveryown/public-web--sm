@@ -99,6 +99,7 @@
 
   .countertop {
     position: absolute;
+    z-index: var(--z2);
     bottom: 0;
     left: 0;
     right: 0;
