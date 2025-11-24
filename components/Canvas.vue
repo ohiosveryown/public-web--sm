@@ -4,7 +4,6 @@
     class="canvas"
     @scroll="handleScroll"
   >
-    <!-- <h1>Canvas</h1> -->
     <img
       class="rm"
       src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1763936610/public-web--sm/rm_2x_s4vpfa.webp"
@@ -15,6 +14,7 @@
 
 <style scoped lang="scss">
   .canvas {
+    position: relative;
     border-radius: var(--radius-inner);
     // padding: var(--border-thickness);
     width: 100%;
@@ -31,12 +31,12 @@
 </style>
 
 <script lang="ts" setup>
-  const canvasRef = ref<HTMLElement | null>(null)
-  const { scrollY } = useCanvasScroll()
+  const canvasRef = ref<HTMLElement | null>(null);
+  const { scrollY } = useCanvasScroll();
 
   const handleScroll = () => {
     if (canvasRef.value) {
-      scrollY.value = canvasRef.value.scrollTop
+      scrollY.value = canvasRef.value.scrollTop;
     }
-  }
+  };
 </script>
