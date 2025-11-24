@@ -318,12 +318,13 @@
     align-items: flex-end;
     position: relative;
     opacity: 1;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
     pointer-events: none;
 
     &--hidden {
-      opacity: 0;
+      opacity: 1;
       pointer-events: none;
+      transform: translateY(8rem);
     }
 
     &::before {
