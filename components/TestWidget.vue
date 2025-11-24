@@ -29,7 +29,8 @@
         <p>{{ answer }}</p>
       </div>
       <div class="widget-footer">
-        <span class="widget-badge">AI is smart – sometimes it's wrong.</span>
+        <!-- <span class="widget-badge">AI is smart – sometimes it's wrong.</span> -->
+        <span class="widget-badge">AI is the best – but also the worst.</span>
       </div>
     </div>
     <div
