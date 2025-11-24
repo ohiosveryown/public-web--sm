@@ -47,7 +47,9 @@
 <style scoped lang="scss">
   .widget {
     border-radius: 3.8rem;
-    overflow: hidden;
+    // overflow: hidden;
+    max-height: 40vh;
+    overflow-y: auto;
   }
 
   .widget-loading {
