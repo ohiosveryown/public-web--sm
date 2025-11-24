@@ -12,8 +12,8 @@
       <h1 class="exact-block">Where Atlanta gets paid.</h1>
       <div class="social">
         <h2 class="cash-sans">
-          You’re in good hands – over 2,000 businesses in Atlanta trust us to
-          take payments.
+          You’re in good hands – over 2,000 businesses in Atlanta trust Square
+          to take payments.
         </h2>
         <img
           src="https://res.cloudinary.com/dn1q8h2ga/image/upload/v1764013036/public-web--sm/pile_3x_akcxua.webp"
@@ -136,5 +136,6 @@
     margin: 0;
     backdrop-filter: blur(10px);
     opacity: 0.8;
+    pointer-events: none;
   }
 </style>
