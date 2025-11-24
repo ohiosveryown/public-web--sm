@@ -76,7 +76,7 @@
 
         <button
           v-else-if="!inputValue && isRecording"
-          class="input-btn"
+          class="input-btn input-btn--stop"
           @click="isRecording = false"
         >
           <IconStop />
@@ -267,7 +267,8 @@
     }
   }
 
-  .input-btn--arrow {
+  .input-btn--arrow,
+  .input-btn--stop {
     opacity: 1;
   }
 
