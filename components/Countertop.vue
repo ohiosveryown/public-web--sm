@@ -44,7 +44,9 @@
                   :alt="suggestion.text"
                 />
               </div>
-              <span class="suggestion-text">{{ suggestion.text }}</span>
+              <span class="suggestion-text monospace">{{
+                suggestion.text
+              }}</span>
             </button>
           </div>
         </Transition>
@@ -158,8 +160,7 @@
 
   .suggestions-container {
     display: flex;
-    gap: 0.8rem;
-    // padding: 0 0.6rem 0.8rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
   }
 
@@ -167,21 +168,17 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1.4rem 0.6rem 0.6rem;
     border-radius: 100px;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 1.4rem;
     color: #fff;
   }
 
   .suggestion-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    overflow: hidden;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 100%;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.1);
 
     img {
       width: 100%;
@@ -191,6 +188,8 @@
   }
 
   .suggestion-text {
+    font-size: 1.3rem;
+    opacity: 0.8;
     white-space: nowrap;
   }
 

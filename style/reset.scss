@@ -1,3 +1,32 @@
+@font-face {
+  font-family: 'Cash Sans Regular';
+  src: url('/assets/CashSans-Regular.woff2') format('woff2');
+  font-display: block;
+  // font-weight: 400;
+  // font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cash Sans Medium';
+  src: url('/assets/CashSans-Medium.woff2') format('woff2');
+  font-display: block;
+  // font-weight: 500;
+  // font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cash Mono Regular';
+  src: url('/assets/CashMono-Regular.woff2') format('woff2');
+  font-display: block;
+  // font-weight: 400;
+  // font-style: normal;
+}
+
+.monospace {
+  font-family: "Cash Mono Regular", monospace;
+  letter-spacing: -0.01rem;
+}
+
 :root {
   --system-font: -apple-system, BlinkMacSystemFont, "avenir next",
     "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial,
