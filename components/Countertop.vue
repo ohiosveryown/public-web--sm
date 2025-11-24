@@ -86,6 +86,8 @@
 </template>
 
 <style scoped lang="scss">
+  @use '../style/grid.scss' as *;
+
   .countertop {
     position: absolute;
     bottom: 0;
@@ -236,6 +238,9 @@
   input {
     flex: 1;
     min-width: 88px;
+    @include breakpoint(lg) {
+      font-size: 1.5rem;
+    }
   }
 
   .input-btn {

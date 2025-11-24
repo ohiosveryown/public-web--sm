@@ -5,11 +5,13 @@
 </template>
 
 <style scoped lang="scss">
+  @use '../style/grid.scss' as *;
+
   .app {
-    padding: 2rem;
-    // display: grid;
-    // place-items: center;
-    // height: 100dvh;
+    padding: 0rem;
+    @include breakpoint(lg) {
+      padding: 2rem;
+    }
   }
 </style>
 

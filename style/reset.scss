@@ -73,6 +73,7 @@ body {
   min-height: 100vh;
   font: normal 1.6rem/1.5 var(--system-font);
   text-rendering: optimizeSpeed;
+  // background: #000;
 }
 
 body,
@@ -146,7 +147,7 @@ select {
   -moz-appearance: none;
   appearance: none;
   font: inherit;
-  font-size: 1.5rem;
+  // font-size: 1.5rem;
   color: inherit;
   line-height: inherit;
   border-radius: 0;
