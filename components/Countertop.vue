@@ -67,14 +67,23 @@
         />
 
         <button
-          v-show="!inputValue"
+          v-if="!inputValue && !isRecording"
           class="input-btn"
+          @click="isRecording = true"
         >
           <IconVoice />
         </button>
 
         <button
-          v-show="inputValue"
+          v-else-if="!inputValue && isRecording"
+          class="input-btn"
+          @click="isRecording = false"
+        >
+          <IconStop />
+        </button>
+
+        <button
+          v-else-if="inputValue"
           class="input-btn input-btn--arrow"
           @click="handleArrowClick"
         >
@@ -342,10 +351,11 @@
 </style>
 
 <script lang="ts" setup>
-  const inputValue = ref('')
-  const showTestWidget = ref(false)
-  const isInputFocused = ref(false)
-  const { shouldHideMask } = useCanvasScroll()
+  const inputValue = ref('');
+  const showTestWidget = ref(false);
+  const isInputFocused = ref(false);
+  const isRecording = ref(false);
+  const { shouldHideMask } = useCanvasScroll();
 
   const suggestions = ref([
     {
@@ -368,29 +378,29 @@
       avatar:
         'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="50" fill="%23B8A9C9"/%3E%3C/svg%3E',
     },
-  ])
+  ]);
 
-  const MIN_CHARS_FOR_SUGGESTIONS = 5
+  const MIN_CHARS_FOR_SUGGESTIONS = 5;
 
   const filteredSuggestions = computed(() => {
     if (inputValue.value.length < MIN_CHARS_FOR_SUGGESTIONS) {
-      return []
+      return [];
     }
 
-    const query = inputValue.value.toLowerCase().trim()
+    const query = inputValue.value.toLowerCase().trim();
     return suggestions.value
       .filter((suggestion) => suggestion.text.toLowerCase().includes(query))
-      .slice(0, 3) // Limit to 3 suggestions
-  })
+      .slice(0, 3); // Limit to 3 suggestions
+  });
 
   const selectSuggestion = (text: string) => {
-    inputValue.value = text
+    inputValue.value = text;
     // Optionally focus the input after selection
     // You could also trigger a search/submit here
-  }
+  };
 
   const handleArrowClick = () => {
-    showTestWidget.value = true
-    inputValue.value = ''
-  }
+    showTestWidget.value = true;
+    inputValue.value = '';
+  };
 </script>
